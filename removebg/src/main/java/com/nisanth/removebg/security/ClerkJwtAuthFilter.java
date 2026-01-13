@@ -67,7 +67,15 @@ public class ClerkJwtAuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        if (path.startsWith("/ws/**")) {
+        if (path.startsWith("/api/token")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        if (path.startsWith("/ws")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        if (path.startsWith("/api/admin/doctors/**")) {
             filterChain.doFilter(request, response);
             return;
         }

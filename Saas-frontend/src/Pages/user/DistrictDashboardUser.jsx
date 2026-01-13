@@ -81,6 +81,39 @@ const DistrictDashboardUser = () => {
             </button>
           </div>
 
+          <div className="bg-white rounded-xl shadow border p-6">
+            <h3 className="text-xl font-semibold text-gray-800">
+              Doctor Availability
+            </h3>
+            <p className="text-gray-600 mt-2">
+              View on-duty government doctors by department and hospital.
+            </p>
+
+            <button
+              onClick={() =>
+                navigate(`/district/${districtId}/doctors`)
+              }
+              className="mt-6 w-full py-3 bg-green-700 text-white rounded-lg hover:bg-green-800"
+            >
+              View Available Doctors
+            </button>
+          </div>
+          <div className="bg-white rounded-xl shadow border p-6">
+            <h3 className="text-xl font-semibold text-gray-800">
+              Token Management
+            </h3>
+            <p className="text-gray-600 mt-2">
+              View on-duty government doctors by department and hospital.
+            </p>
+
+            <button
+              onClick={() => navigate(`/${districtId}/token-booking`)}
+              className="mt-6 w-full py-3 bg-green-700 text-white rounded-lg hover:bg-green-800"
+            >
+              Book a  Token
+            </button>
+          </div>
+
           {/* PUBLIC INFO */}
           <div className="bg-white rounded-xl shadow border p-6">
             <h3 className="text-xl font-semibold text-gray-800">

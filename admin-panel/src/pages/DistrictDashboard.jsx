@@ -110,33 +110,41 @@ const DistrictDashboard = () => {
 </div>
 
           {/* Future Feature – Doctors */}
-          <div className="
-            rounded-xl bg-white border border-gray-200
-            opacity-60 cursor-not-allowed
-          ">
-            <div className="border-b bg-gray-50 px-6 py-4 rounded-t-xl">
-              <h3 className="text-xl font-semibold text-gray-800">
-                Doctors & Staff
-              </h3>
-              <p className="text-sm text-gray-500">
-                Human resource management
-              </p>
-            </div>
+          {/* Doctor Management */}
+<div
+  onClick={() => navigate(`/district/${districtId}/doctor-management`)}
+  className="
+    cursor-pointer rounded-xl bg-white
+    border border-gray-200 shadow-sm
+    hover:shadow-lg transition-all
+  "
+>
+  <div className="border-b bg-purple-50 px-6 py-4 rounded-t-xl">
+    <h3 className="text-xl font-semibold text-gray-800">
+      Doctor Management
+    </h3>
+    <p className="text-sm text-gray-500">
+      Availability & duty schedules
+    </p>
+  </div>
 
-            <div className="px-6 py-6">
-              <p className="text-gray-600">
-                Manage doctor postings, staff records, and shifts.
-              </p>
+  <div className="px-6 py-6">
+    <p className="text-gray-600">
+      Add doctors, assign departments,
+      manage availability, shifts, and leave status.
+    </p>
 
-              <button className="
-                mt-6 w-full py-2.5 rounded-lg
-                bg-gray-300 text-gray-600 font-medium
-                cursor-not-allowed
-              ">
-                Coming Soon
-              </button>
-            </div>
-          </div>
+    <button
+      className="
+        mt-6 w-full py-2.5 rounded-lg
+        bg-purple-700 text-white font-medium
+        hover:bg-purple-800 transition
+      "
+    >
+      Open Module
+    </button>
+  </div>
+</div>
 
           {/* Future Feature – Reports */}
           <div className="

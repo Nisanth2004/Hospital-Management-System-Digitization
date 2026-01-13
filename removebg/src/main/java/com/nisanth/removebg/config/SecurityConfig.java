@@ -30,8 +30,8 @@ public class SecurityConfig {
         return http.cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth->
-                        auth.requestMatchers("/api/webhooks/**","/api/admin/**","/api/public/medical-stock/**","/api/public/**","/api/public/notifications/**", "/ws/**",
-                                        "/public/**")
+                        auth.requestMatchers("/api/webhooks/**","/api/admin/**","/api/public/medical-stock/**","/api/public/**","/api/admin/doctors/**","/api/public/notifications/**", "/ws/**",
+                                        "/public/**","/api/token/**")
 
                                 .permitAll().anyRequest().authenticated())
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -7,10 +7,11 @@ import credits from './credits.png'
 import people_org from './people_org.png'
 import b3 from './b3.jpg'
 import bed from './bed.webp'
+import bed1 from './bed1.webp'
 
 import tnemb from './tnemb.jpg'
 export const assets={
-    logo,video_banner,people,people_org,credits,tn_logo,b3,tnemb,bed
+    logo,video_banner,people,people_org,credits,tn_logo,b3,tnemb,bed,bed1
 }
 
 export const steps = [

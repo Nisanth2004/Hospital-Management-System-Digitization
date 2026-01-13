@@ -17,6 +17,10 @@ import PublicHome from './Pages/PublicHome'
 import BedAvailabilityUser from './Pages/user/BedAvailabilityUser'
 import GovtMedicalSchemes from './Pages/GovtMedicalSchemes'
 import SchemeDetails from './Pages/SchemeDetails'
+import DistrictDoctorListUser from './Pages/user/DistrictDoctorListUser'
+import TokenBooking from './Pages/user/TokenBooking'
+import TokenDetails from './Pages/user/TokenDetails'
+import TokenList from './Pages/user/TokenList'
 
 
 function App() {
@@ -54,6 +58,14 @@ function App() {
   path="/district/:districtId/beds"
   element={<BedAvailabilityUser />}
 />
+
+<Route
+  path="/district/:districtId/doctors"
+  element={<DistrictDoctorListUser />}
+/>
+  <Route path="/token-details" element={<TokenDetails />} />
+<Route path="/:districtId/token-booking" element={<TokenBooking />} />
+<Route path="/my-tokens" element={<TokenList patientId={1} />} /> 
 
             <Route path='/pricing' element={<BuyCredits/>}></Route>
         <Route path='/result' element={
