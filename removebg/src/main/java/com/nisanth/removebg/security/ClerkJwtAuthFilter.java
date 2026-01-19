@@ -79,6 +79,10 @@ public class ClerkJwtAuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        if (path.startsWith("/api/public/crowd-status")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         // 🔐 JWT REQUIRED FOR OTHER APIs
         String authHeader = request.getHeader("Authorization");

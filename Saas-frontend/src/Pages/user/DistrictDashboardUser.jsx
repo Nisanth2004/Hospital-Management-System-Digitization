@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { assets } from "../../assets/assets";
 import customaxios from "../../service/customAxios";
+import CrowdStatusCard from "../../components/CrowdStatusCard";
 
 const DistrictDashboardUser = () => {
   const { districtId } = useParams();
@@ -39,6 +40,11 @@ const DistrictDashboardUser = () => {
           {districtName} District Healthcare Services
         </h2>
 
+        {/* 🔴 CROWD STATUS SECTION (NEW & IMPORTANT) */}
+        <div className="mb-10">
+          <CrowdStatusCard districtId={districtId} />
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
           {/* MEDICAL STOCK */}
@@ -61,7 +67,7 @@ const DistrictDashboardUser = () => {
             </button>
           </div>
 
-          {/* BED AVAILABILITY (NEW) */}
+          {/* BED AVAILABILITY */}
           <div className="bg-white rounded-xl shadow border p-6">
             <h3 className="text-xl font-semibold text-gray-800">
               Hospital Bed Availability
@@ -81,6 +87,7 @@ const DistrictDashboardUser = () => {
             </button>
           </div>
 
+          {/* DOCTORS */}
           <div className="bg-white rounded-xl shadow border p-6">
             <h3 className="text-xl font-semibold text-gray-800">
               Doctor Availability
@@ -98,19 +105,21 @@ const DistrictDashboardUser = () => {
               View Available Doctors
             </button>
           </div>
+
+          {/* TOKEN */}
           <div className="bg-white rounded-xl shadow border p-6">
             <h3 className="text-xl font-semibold text-gray-800">
               Token Management
             </h3>
             <p className="text-gray-600 mt-2">
-              View on-duty government doctors by department and hospital.
+              Book hospital tokens and avoid waiting in queues.
             </p>
 
             <button
               onClick={() => navigate(`/${districtId}/token-booking`)}
               className="mt-6 w-full py-3 bg-green-700 text-white rounded-lg hover:bg-green-800"
             >
-              Book a  Token
+              Book a Token
             </button>
           </div>
 

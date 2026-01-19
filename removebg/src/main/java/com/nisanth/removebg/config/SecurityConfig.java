@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth->
                         auth.requestMatchers("/api/webhooks/**","/api/admin/**","/api/public/medical-stock/**","/api/public/**","/api/admin/doctors/**","/api/public/notifications/**", "/ws/**",
-                                        "/public/**","/api/token/**")
+                                        "/public/**","/api/token/**","/api/public/crowd-status/**")
 
                                 .permitAll().anyRequest().authenticated())
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
