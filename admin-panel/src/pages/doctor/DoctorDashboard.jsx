@@ -1,47 +1,65 @@
 import React, { useState, useEffect } from "react";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
-import  axios  from 'axios';
+import axios from "axios";
 
 const DoctorDashboard = () => {
-  const [doctor, setDoctor] = useState(
-    JSON.parse(localStorage.getItem("doctor"))
-  );
+  const [doctor, setDoctor] = useState(null);
+  const [timing, setTiming] = useState({ start: "", end: "" });
+  const [tokens, setTokens] = useState([]);
+  const [newPassword, setNewPassword] = useState("");
+
   const navigate = useNavigate();
 
-  const [timing, setTiming] = useState({
-    start: doctor.shiftStartTime || "",
-    end: doctor.shiftEndTime || ""
-  });
-
-  const [tokens, setTokens] = useState([]);
-
+  // 🔐 LOGOUT
   const logout = () => {
     localStorage.removeItem("doctor");
     navigate("/doctor/login");
   };
 
-  const [newPassword, setNewPassword] = useState("");
-
-  const refreshDoctor = d => {
-    setDoctor(d);
-    localStorage.setItem("doctor", JSON.stringify(d));
-  };
-
-  // Fetch doctor tokens
-  const fetchTokens = async () => {
-    try {
-      const res = await axios.get(`http://localhost:8081/api/token/doctor/${doctor.id}`);
-      setTokens(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
+  // ✅ LOAD DOCTOR FROM LOCAL STORAGE
   useEffect(() => {
-    fetchTokens();
-  }, [doctor.id]);
+    const storedDoctor = localStorage.getItem("doctor");
 
+    if (!storedDoctor) {
+      navigate("/doctor/login");
+      return;
+    }
+
+    const parsedDoctor = JSON.parse(storedDoctor);
+    setDoctor(parsedDoctor);
+
+    setTiming({
+      start: parsedDoctor.shiftStartTime || "",
+      end: parsedDoctor.shiftEndTime || ""
+    });
+  }, [navigate]);
+
+  // ✅ FETCH TOKENS SAFELY
+  useEffect(() => {
+    if (!doctor) return;
+
+    const fetchTokens = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:8081/api/token/doctor/${doctor.id}`
+        );
+        setTokens(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchTokens();
+  }, [doctor]);
+
+  // 🔄 REFRESH DOCTOR STATE
+  const refreshDoctor = updatedDoctor => {
+    setDoctor(updatedDoctor);
+    localStorage.setItem("doctor", JSON.stringify(updatedDoctor));
+  };
+
+  // 🩺 UPDATE STATUS
   const updateStatus = async status => {
     const res = await api.put("/doctor/status", null, {
       params: { email: doctor.email, status }
@@ -49,6 +67,7 @@ const DoctorDashboard = () => {
     refreshDoctor(res.data);
   };
 
+  // ⏰ UPDATE TIMING
   const updateTiming = async () => {
     const res = await api.put("/doctor/timing", null, {
       params: {
@@ -60,6 +79,7 @@ const DoctorDashboard = () => {
     refreshDoctor(res.data);
   };
 
+  // 🏖 LEAVE MANAGEMENT
   const updateLeave = async onLeave => {
     const res = await api.put("/doctor/leave", null, {
       params: { email: doctor.email, onLeave }
@@ -67,6 +87,7 @@ const DoctorDashboard = () => {
     refreshDoctor(res.data);
   };
 
+  // 🔑 CHANGE PASSWORD
   const changePassword = async () => {
     await api.put("/doctor/password", null, {
       params: { email: doctor.email, newPassword }
@@ -75,18 +96,33 @@ const DoctorDashboard = () => {
     setNewPassword("");
   };
 
+  // 🎟 UPDATE TOKEN STATUS
   const updateTokenStatus = async (tokenId, status) => {
     try {
-      const res = await axios.put(`http://localhost:8081/api/token/doctor/update-status/${tokenId}?status=${status}`);
-      setTokens(prev => prev.map(t => (t.id === tokenId ? res.data : t)));
+      const res = await axios.put(
+        `http://localhost:8081/api/token/doctor/update-status/${tokenId}?status=${status}`
+      );
+      setTokens(prev =>
+        prev.map(t => (t.id === tokenId ? res.data : t))
+      );
     } catch (err) {
       console.error(err);
     }
   };
 
+  // 🛑 IMPORTANT: PREVENT NULL CRASH
+  if (!doctor) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-600 text-lg">Loading Doctor Dashboard...</p>
+      </div>
+    );
+  }
+
+  // ✅ JSX STARTS (UNCHANGED)
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      
+
       {/* HEADER */}
       <div className="bg-white p-6 rounded-2xl shadow mb-8 flex justify-between items-center">
         <div>
@@ -205,7 +241,7 @@ const DoctorDashboard = () => {
           </div>
         </div>
 
-        {/* TOKENS LIST */}
+        {/* TOKENS */}
         <div className="bg-white p-6 rounded-2xl shadow lg:col-span-2">
           <h2 className="text-xl font-semibold mb-4">📋 My Tokens</h2>
 
@@ -220,44 +256,36 @@ const DoctorDashboard = () => {
                     token.status === "CANCELLED" ? "opacity-60" : ""
                   }`}
                 >
-                  <div className="flex flex-col mb-2 md:mb-0">
+                  <div>
                     <span className="font-semibold">
-  {token.patientName || "Unknown Patient"}
-</span>
-
-                    <span className="text-gray-500">{token.reason}</span>
-                  </div>
-
-                  <div className="flex flex-col mb-2 md:mb-0">
-                    <span className="text-gray-700">Time</span>
-                    <span className="font-medium">
-                      {new Date(token.tokenTime).toLocaleString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: true
-                      })}
+                      {token.patientName || "Unknown Patient"}
                     </span>
+                    <p className="text-gray-500">{token.reason}</p>
                   </div>
 
-                  <div className="flex flex-col items-start md:items-end gap-2">
-                    <span className="text-gray-700 font-medium">Status: {token.status}</span>
-                    {token.status === "BOOKED" && (
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => updateTokenStatus(token.id, "COMPLETED")}
-                          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm"
-                        >
-                          Complete
-                        </button>
-                        <button
-                          onClick={() => updateTokenStatus(token.id, "CANCELLED")}
-                          className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg text-sm"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    )}
+                  <div>
+                    {new Date(token.tokenTime).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit"
+                    })}
                   </div>
+
+                  {token.status === "BOOKED" && (
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => updateTokenStatus(token.id, "COMPLETED")}
+                        className="bg-blue-600 text-white px-3 py-1 rounded"
+                      >
+                        Complete
+                      </button>
+                      <button
+                        onClick={() => updateTokenStatus(token.id, "CANCELLED")}
+                        className="bg-red-600 text-white px-3 py-1 rounded"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

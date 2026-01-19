@@ -24,10 +24,13 @@ public interface TokenRepository extends JpaRepository<Token, Long> {
     List<Token> findByDoctorIdAndStatus(Long doctorId, String status);
 
     @Query("""
-       SELECT HOUR(t.createdAt), COUNT(t)
-       FROM Token t
-       WHERE t.districtId = :districtId
-       GROUP BY HOUR(t.createdAt)
-    """)
+   SELECT HOUR(t.bookedAt), COUNT(t)
+   FROM Token t
+   WHERE t.districtId = :districtId
+     AND t.bookedAt IS NOT NULL
+   GROUP BY HOUR(t.bookedAt)
+   ORDER BY HOUR(t.bookedAt)
+""")
     List<Object[]> getHourlyTokenStats(@Param("districtId") Long districtId);
+
 }

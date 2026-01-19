@@ -86,7 +86,27 @@ const CrowdStatusCard = ({ districtId }) => {
         * Crowd status is calculated using live token flow, doctor availability,
         and bed occupancy.
       </p>
+
+      {/* 🕒 BEST TIME TO VISIT */}
+{status.bestVisitTime?.startTime && (
+  <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+    <p className="text-sm text-blue-800 font-semibold">
+      🕒 Best Time to Visit OPD
+    </p>
+
+    <p className="text-lg font-bold text-blue-900 mt-1">
+      {status.bestVisitTime.startTime} – {status.bestVisitTime.endTime}
+    </p>
+
+    <p className="text-xs text-blue-700 mt-1">
+      {status.bestVisitTime.reason}
+    </p>
+  </div>
+)}
+
     </div>
+
+
   );
 };
 

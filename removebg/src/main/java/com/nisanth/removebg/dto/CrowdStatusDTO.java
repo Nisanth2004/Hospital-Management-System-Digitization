@@ -18,4 +18,6 @@ public class CrowdStatusDTO {
 
     private String crowdLevel;       // LOW, MODERATE, HIGH
     private int estimatedWaitTime;   // minutes
+    private BestVisitTimeDTO bestVisitTime;
+
 }

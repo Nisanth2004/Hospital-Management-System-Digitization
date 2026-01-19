@@ -1,5 +1,6 @@
 package com.nisanth.removebg.controller;
 
+import com.nisanth.removebg.dto.BestVisitTimeDTO;
 import com.nisanth.removebg.dto.CrowdStatusDTO;
 import com.nisanth.removebg.entity.Bed;
 import com.nisanth.removebg.entity.District;
@@ -49,6 +50,8 @@ public class CrowdStatusController {
                 .filter(b -> !Boolean.TRUE.equals(b.getOccupied()))
                 .count();
 
+
+
         // 🔹 Crowd Level Logic
         String crowdLevel;
         if (waitingTokens <= 10) {
@@ -74,6 +77,46 @@ public class CrowdStatusController {
         dto.setCrowdLevel(crowdLevel);
         dto.setEstimatedWaitTime(estimatedWaitTime);
 
+        List<Object[]> hourlyStats = tokenRepo.getHourlyTokenStats(districtId);
+
+        BestVisitTimeDTO bestVisitTime =
+                calculateBestVisitTime(hourlyStats, availableDoctors);
+
+        dto.setBestVisitTime(bestVisitTime);
+
+
         return dto;
     }
+
+    private BestVisitTimeDTO calculateBestVisitTime(
+            List<Object[]> hourlyTokens,
+            int availableDoctors
+    ) {
+        int minTokens = Integer.MAX_VALUE;
+        int bestHour = -1;
+
+        for (Object[] row : hourlyTokens) {
+            int hour = (int) row[0];
+            int tokenCount = ((Long) row[1]).intValue();
+
+            if (tokenCount < minTokens) {
+                minTokens = tokenCount;
+                bestHour = hour;
+            }
+        }
+
+        BestVisitTimeDTO dto = new BestVisitTimeDTO();
+
+        if (bestHour == -1 || availableDoctors == 0) {
+            dto.setReason("Currently high load. Please check later.");
+            return dto;
+        }
+
+        dto.setStartTime(String.format("%02d:00", bestHour));
+        dto.setEndTime(String.format("%02d:00", bestHour + 2));
+        dto.setReason("Low token load and good doctor availability");
+
+        return dto;
+    }
+
 }
