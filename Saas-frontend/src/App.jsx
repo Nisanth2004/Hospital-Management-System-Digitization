@@ -21,6 +21,12 @@ import DistrictDoctorListUser from './Pages/user/DistrictDoctorListUser'
 import TokenBooking from './Pages/user/TokenBooking'
 import TokenDetails from './Pages/user/TokenDetails'
 import TokenList from './Pages/user/TokenList'
+import TalukListUser from './Pages/user/TalukListUser'
+import RaiseComplaint from './Pages/user/RaiseComplaint'
+import UserComplaintHistory from './Pages/user/UserComplaintHistory'
+import NavigationPage from './Pages/user/NavigationPage'
+import AdvancedNavigationPage from './Pages/AdvancedNavigationPage'
+
 
 
 function App() {
@@ -48,19 +54,39 @@ function App() {
          <Route path="/districts" element={<DistrictListUser />} />
          <Route path="/" element={<GovtMedicalSchemes />} />
         <Route path="/schemes/:id" element={<SchemeDetails />} />
-  <Route path="/districts/:districtId" element={<DistrictDashboardUser />} />
-  <Route
-  path="/district/:districtId/medical-stock"
+<Route
+  path="/districts/:districtId/taluk/:talukId"
+  element={<DistrictDashboardUser />}
+/>
+
+<Route
+  path="/district/:districtId/taluk/:talukId/medical-stock"
   element={<MedicalStockUser />}
 />
-
 <Route
-  path="/district/:districtId/beds"
+  path="/district/:districtId/taluk/:talukId/beds"
   element={<BedAvailabilityUser />}
+/>
+<Route
+  path="/district/:districtId/taluk/:talukId/navigation"
+  element={<AdvancedNavigationPage />}
 />
 
 <Route
-  path="/district/:districtId/doctors"
+  path="/user/complaints/:talukId"
+  element={<UserComplaintHistory />}
+/>
+
+<Route
+  path="/district/:districtId/taluk/:talukId/complaint"
+  element={<RaiseComplaint />}
+/>
+<Route
+  path="/districts/:districtId/taluks"
+  element={<TalukListUser />}
+/>
+<Route
+  path="/district/:districtId/taluk/:talukId/doctors"
   element={<DistrictDoctorListUser />}
 />
   <Route path="/token-details" element={<TokenDetails />} />

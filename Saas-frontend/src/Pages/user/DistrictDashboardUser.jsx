@@ -5,7 +5,9 @@ import customaxios from "../../service/customAxios";
 import CrowdStatusCard from "../../components/CrowdStatusCard";
 
 const DistrictDashboardUser = () => {
-  const { districtId } = useParams();
+  const { districtId, talukId } = useParams();
+
+
   const navigate = useNavigate();
   const [districtName, setDistrictName] = useState("");
 
@@ -59,7 +61,8 @@ const DistrictDashboardUser = () => {
 
             <button
               onClick={() =>
-                navigate(`/district/${districtId}/medical-stock`)
+                navigate(`/district/${districtId}/taluk/${talukId}/medical-stock`)
+
               }
               className="mt-6 w-full py-3 bg-green-700 text-white rounded-lg hover:bg-green-800 transition"
             >
@@ -79,7 +82,8 @@ const DistrictDashboardUser = () => {
 
             <button
               onClick={() =>
-                navigate(`/district/${districtId}/beds`)
+                navigate(`/district/${districtId}/taluk/${talukId}/beds`)
+
               }
               className="mt-6 w-full py-3 bg-green-700 text-white rounded-lg hover:bg-green-800 transition"
             >
@@ -98,7 +102,8 @@ const DistrictDashboardUser = () => {
 
             <button
               onClick={() =>
-                navigate(`/district/${districtId}/doctors`)
+              navigate(`/district/${districtId}/taluk/${talukId}/doctors`)
+
               }
               className="mt-6 w-full py-3 bg-green-700 text-white rounded-lg hover:bg-green-800"
             >
@@ -122,6 +127,44 @@ const DistrictDashboardUser = () => {
               Book a Token
             </button>
           </div>
+
+
+          {/* Raise a Compliant */}
+          <div className="bg-white rounded-xl shadow border p-6">
+  <h3 className="text-xl font-semibold text-gray-800">
+    Public Grievance & Compliance
+  </h3>
+  <p className="text-gray-600 mt-2">
+    Raise complaints about hospital facilities or services.
+  </p>
+
+  <button
+    onClick={() =>
+      navigate(`/district/${districtId}/taluk/${talukId}/complaint`)
+    }
+    className="mt-6 w-full py-3 bg-red-700 text-white rounded-lg"
+  >
+    Raise Complaint
+  </button>
+</div>
+{/* INDOOR NAVIGATION */}
+<div className="bg-white rounded-xl shadow border p-6">
+  <h3 className="text-xl font-semibold text-gray-800">
+    Indoor Navigation
+  </h3>
+  <p className="text-gray-600 mt-2">
+    Find CT Scan, ICU, Pharmacy, Lab and other services easily.
+  </p>
+
+  <button
+    onClick={() =>
+      navigate(`/district/${districtId}/taluk/${talukId}/navigation`)
+    }
+    className="mt-6 w-full py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800"
+  >
+    Open Navigation
+  </button>
+</div>
 
           {/* PUBLIC INFO */}
           <div className="bg-white rounded-xl shadow border p-6">

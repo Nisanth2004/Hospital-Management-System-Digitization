@@ -3,7 +3,8 @@ import api from "../services/api";
 import { useParams } from "react-router-dom";
 
 const MedicalStock = () => {
-  const { districtId } = useParams();
+ const { districtId, talukId } = useParams();
+
   const [stocks, setStocks] = useState([]);
   const [activeTab, setActiveTab] = useState("list");
   const [formData, setFormData] = useState({

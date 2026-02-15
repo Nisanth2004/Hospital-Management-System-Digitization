@@ -11,8 +11,11 @@ import AddDoctorAdmin from "./pages/admin/AddDoctorAdmin";
 import DoctorLogin from './pages/doctor/DoctorLogin';
 import DoctorDashboard from './pages/doctor/DoctorDashboard';
 import EditDoctorAdmin from "./pages/admin/EditDoctorAdmin";
+import ComplaintList from "./pages/ComplaintList";
+import AdminNavigationPage from "./pages/AdminNavigationPage";
 
 const App = () => {
+  
   return (
     <BrowserRouter>
       <Routes>
@@ -24,23 +27,28 @@ const App = () => {
         <Route path="/district/:districtId" element={<DistrictDashboard />} />
 
         {/* Medical Stock Management */}
-        <Route
-          path="/district/:districtId/medical-stock"
-          element={<MedicalStock />}
-        />
-        <Route
-  path="/district/:districtId/bed-management"
+       <Route
+  path="/district/:districtId/taluk/:talukId/medical-stock"
+  element={<MedicalStock />}
+/>
+  <Route
+  path="/district/:districtId/taluk/:talukId/bed-management"
   element={<BedManagementAdmin />}
 />
+
 <Route
-  path="/district/:districtId/doctor-management--2"
-  element={<DoctorManagementAdmin />}
-
-
-  
+  path="/district/:districtId/taluk/:talukId/complaints"
+  element={<ComplaintList />}
+/>
+<Route
+  path="/district/:districtId/taluk/:talukId/admin-navigation"
+  element={<AdminNavigationPage />}
 />
 
-<Route path="/district/:districtId/doctor-management" element={<DoctorListAdmin />} />
+<Route
+  path="/district/:districtId/taluk/:talukId/doctor-management"
+  element={<DoctorListAdmin />}
+/>
 <Route path="/admin/add-doctor/:districtId" element={<AddDoctorAdmin />} />
 
 <Route path="/doctor/login" element={<DoctorLogin />} />

@@ -3,7 +3,8 @@ import api from "../../services/api";
 import { useParams, useNavigate } from "react-router-dom";
 
 const AddDoctorAdmin = () => {
-  const { districtId } = useParams();
+const { districtId, talukId } = useParams();
+
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -18,15 +19,18 @@ const AddDoctorAdmin = () => {
     shiftEndTime: "",
   });
 
-  const addDoctor = async () => {
-    await api.post("/doctors", {
-      ...form,
-      districtId,
-      status: "AVAILABLE",
-      onLeave: false,
-    });
-    navigate(`/district/${districtId}/doctor-management`);
-  };
+const addDoctor = async () => {
+  await api.post("/doctors", {
+    ...form,
+    districtId,
+    talukId,
+    status: "AVAILABLE",
+    onLeave: false,
+  });
+
+  navigate(`/district/${districtId}/taluk/${talukId}/doctor-management`);
+};
+
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">

@@ -6,7 +6,8 @@ import { useParams } from "react-router-dom";
 const DoctorManagementAdmin = () => {
 
   const [doctors, setDoctors] = useState([]);
-  const { districtId } = useParams(); // ✅ GET FROM URL
+const { districtId, talukId } = useParams();
+
   const [form, setForm] = useState({
     name: "",
     department: "",
@@ -20,7 +21,8 @@ const DoctorManagementAdmin = () => {
   }, []);
 
   const fetchDoctors = async () => {
-    const res = await api.get(`/doctors/${districtId}`);
+  const res = await api.get(`/doctors/${districtId}/${talukId}`);
+
     setDoctors(res.data);
   };
 

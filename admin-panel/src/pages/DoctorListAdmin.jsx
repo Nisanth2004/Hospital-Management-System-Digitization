@@ -3,7 +3,8 @@ import api from "../services/api";
 import { useParams, useNavigate } from "react-router-dom";
 
 const DoctorListAdmin = () => {
-  const { districtId } = useParams();
+  const { districtId, talukId } = useParams();
+
   const navigate = useNavigate();
   const [doctors, setDoctors] = useState([]);
 

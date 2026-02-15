@@ -111,7 +111,8 @@ const DistrictListUser = () => {
             {filteredDistricts.map((district) => (
               <div
                 key={district.id}
-                onClick={() => navigate(`/districts/${district.id}`)}
+                onClick={() => navigate(`/districts/${district.id}/taluks`)}
+
                 className="
                   cursor-pointer bg-white rounded-xl p-6
                   border shadow-sm hover:shadow-lg hover:border-green-600

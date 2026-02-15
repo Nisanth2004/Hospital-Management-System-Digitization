@@ -83,6 +83,25 @@ public class ClerkJwtAuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        if (path.startsWith("/api/public/complaints")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        if (path.startsWith("/api/admin/navigation/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        // ✅ Skip static resources
+        if (path.startsWith("/uploads/") ||
+                path.startsWith("/css/") ||
+                path.startsWith("/js/") ||
+                path.startsWith("/images/") ||
+                path.equals("/") ||
+                path.contains(".")) {   // any file like .jpg .png .css etc
+
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         // 🔐 JWT REQUIRED FOR OTHER APIs
         String authHeader = request.getHeader("Authorization");

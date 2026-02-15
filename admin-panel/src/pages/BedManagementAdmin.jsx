@@ -11,7 +11,8 @@ import {
 ============================ */
 
 const BedManagementAdmin = () => {
-  const { districtId } = useParams();
+  const { districtId, talukId } = useParams();
+
 
   const [beds, setBeds] = useState([]);
   const [showForm, setShowForm] = useState(false);

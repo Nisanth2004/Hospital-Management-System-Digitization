@@ -8,6 +8,8 @@ const TokenBooking = () => {
 
   // ✅ GET districtId FROM URL
   const { districtId } = useParams();
+const [taluks, setTaluks] = useState([]);
+const [selectedTaluk, setSelectedTaluk] = useState("");
 
   const [departments, setDepartments] = useState([]);
   const [selectedDept, setSelectedDept] = useState("");
@@ -29,6 +31,15 @@ const TokenBooking = () => {
       .then(res => setDepartments(res.data))
       .catch(err => console.error(err));
   }, []);
+useEffect(() => {
+  if (!districtId) return;
+
+  customaxios
+    .get(`/admin/taluks/district/${districtId}`)
+    .then(res => setTaluks(res.data))
+    .catch(err => console.error(err));
+
+}, [districtId]);
 
   /* =========================
      LOAD DOCTORS
@@ -103,6 +114,9 @@ const TokenBooking = () => {
       </p>
 
       <div className="space-y-4">
+        {/* Taluk */}
+
+
 
         {/* Department */}
         <div>
