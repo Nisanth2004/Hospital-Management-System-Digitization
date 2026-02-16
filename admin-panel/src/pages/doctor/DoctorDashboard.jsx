@@ -53,6 +53,32 @@ const DoctorDashboard = () => {
     fetchTokens();
   }, [doctor]);
 
+  const handleFileUpload = async (event, tokenId) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    await axios.put(
+      `http://localhost:8081/api/token/doctor/upload-report/${tokenId}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    alert("Report uploaded successfully");
+  } catch (err) {
+    console.error(err);
+    alert("Upload failed");
+  }
+};
+
+
   // 🔄 REFRESH DOCTOR STATE
   const refreshDoctor = updatedDoctor => {
     setDoctor(updatedDoctor);
@@ -270,22 +296,35 @@ const DoctorDashboard = () => {
                     })}
                   </div>
 
-                  {token.status === "BOOKED" && (
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => updateTokenStatus(token.id, "COMPLETED")}
-                        className="bg-blue-600 text-white px-3 py-1 rounded"
-                      >
-                        Complete
-                      </button>
-                      <button
-                        onClick={() => updateTokenStatus(token.id, "CANCELLED")}
-                        className="bg-red-600 text-white px-3 py-1 rounded"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  )}
+              {token.status === "BOOKED" && (
+  <div className="flex gap-2">
+    <button
+      onClick={() => updateTokenStatus(token.id, "COMPLETED")}
+      className="bg-blue-600 text-white px-3 py-1 rounded"
+    >
+      Complete
+    </button>
+    <button
+      onClick={() => updateTokenStatus(token.id, "CANCELLED")}
+      className="bg-red-600 text-white px-3 py-1 rounded"
+    >
+      Cancel
+    </button>
+  </div>
+)}
+
+{/* 👇 SHOW UPLOAD BUTTON AFTER COMPLETED */}
+{token.status === "COMPLETED" && (
+  <div className="flex flex-col gap-2 mt-2">
+    <input
+      type="file"
+      accept="application/pdf"
+      onChange={(e) => handleFileUpload(e, token.id)}
+      className="text-sm"
+    />
+  </div>
+)}
+
                 </div>
               ))}
             </div>

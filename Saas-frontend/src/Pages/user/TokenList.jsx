@@ -116,6 +116,16 @@ const TokenList = ({ patientId }) => {
               {token.status}
             </span>
           </div>
+
+          {token.status === "COMPLETED" && (
+  <a
+    href={`http://localhost:8081/api/token/download-report/${token.id}`}
+    className="mt-2 bg-blue-600 text-white px-3 py-1 rounded text-sm"
+  >
+    Download Report
+  </a>
+)}
+
         </div>
       ))}
     </div>

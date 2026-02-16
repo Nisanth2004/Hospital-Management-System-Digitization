@@ -23,4 +23,5 @@ public class Token {
 
     private String status; // BOOKED, COMPLETED, CANCELLED
     private String reason; // reason for visit
+    private String reportFileName;
 }

@@ -10,6 +10,15 @@ import com.nisanth.removebg.repository.DoctorRepository;
 import com.nisanth.removebg.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+
+import java.nio.file.*;
+import java.io.IOException;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -178,6 +187,55 @@ public class TokenController {
         }
 
         return ResponseEntity.ok(dto);
+    }
+
+    @PutMapping("/doctor/upload-report/{tokenId}")
+    public ResponseEntity<?> uploadReport(
+            @PathVariable Long tokenId,
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
+
+        Token token = tokenRepo.findById(tokenId)
+                .orElseThrow(() -> new RuntimeException("Token not found"));
+
+        if (!token.getStatus().equals("COMPLETED")) {
+            return ResponseEntity.badRequest().body("Token must be COMPLETED first");
+        }
+
+        // Create uploads folder if not exists
+        String uploadDir = "uploads/";
+        Files.createDirectories(Paths.get(uploadDir));
+
+        // Unique file name
+        String fileName = "report_patient_" + token.getPatientId() +
+                "_token_" + token.getId() + ".pdf";
+
+        Path filePath = Paths.get(uploadDir + fileName);
+        Files.write(filePath, file.getBytes());
+
+        token.setReportFileName(fileName);
+        tokenRepo.save(token);
+
+        return ResponseEntity.ok("Report uploaded successfully");
+    }
+    @GetMapping("/download-report/{tokenId}")
+    public ResponseEntity<Resource> downloadReport(@PathVariable Long tokenId) throws IOException {
+
+        Token token = tokenRepo.findById(tokenId)
+                .orElseThrow(() -> new RuntimeException("Token not found"));
+
+        if (token.getReportFileName() == null) {
+            throw new RuntimeException("Report not uploaded yet");
+        }
+
+        Path path = Paths.get("uploads/").resolve(token.getReportFileName());
+        Resource resource = new UrlResource(path.toUri());
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + token.getReportFileName() + "\"")
+                .body(resource);
     }
 
 
